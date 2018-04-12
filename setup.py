@@ -29,7 +29,7 @@ setup(
     long_description='%s' % read('README.md'),
     author='ridi-data',
     author_email='data.team@ridi.com',
-    url='https://github.com/ridi-data/ridi-impala-connector',
+    url='https://github.com/ridi/ridi-impala-connector',
     packages=find_packages('src'),
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
