@@ -6,6 +6,14 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+class ImpalaError(Exception):
+    def __init__(self, cause):
+        self.cause = cause
+
+    def __str__(self):
+        return str(self.cause)
+
+
 class impala_thrift_connection(object):
     def __init__(self, connection):
         self._conn = connection
@@ -25,7 +33,7 @@ class impala_thrift_connection(object):
                     logger.debug(q)
                     cur.execute(q)
             except impala_Error as e:
-                raise
+                raise ImpalaError(e)
 
     def execute_query(self, query, check_error=True):
         with self._conn.cursor() as cur:
@@ -39,7 +47,7 @@ class impala_thrift_connection(object):
                 return named_rows
             except impala_Error as e:
                 if check_error:
-                    raise
+                    raise ImpalaError(e)
                 else:
                     return []
 
@@ -56,7 +64,7 @@ class impala_thrift_connection(object):
                     yield named_row
             except impala_Error as e:
                 if check_error:
-                    raise
+                    raise ImpalaError(e)
                 else:
                     return
 
