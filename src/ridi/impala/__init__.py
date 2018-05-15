@@ -1,6 +1,6 @@
 from impala.dbapi import connect as impala_connect
 from impala.error import Error as impala_Error
-from ridi.settings import IMPALA_CONNECT_ARGS
+from .config import IMPALA_CONNECT_ARGS
 import logging
 
 logger = logging.getLogger(__name__)
@@ -105,4 +105,4 @@ def date_eq_condition(the_date):
 
 DATE_AS_STRING = "CONCAT(LPAD(CAST(year AS STRING),4,'0'),'-',LPAD(CAST(month AS STRING),2,'0'),'-',LPAD(CAST(day AS STRING),2,'0'))"
 
-IMPALA_CLIENT = ImpalaThriftClient(IMPALA_CONNECT_ARGS)
+IMPALA_CLIENT = ImpalaThriftClient(IMPALA_CONNECT_ARGS.as_dict())
