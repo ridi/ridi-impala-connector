@@ -23,7 +23,7 @@ def read(*names, **kwargs):
 
 setup(
     name='ridi-impala-connector',
-    version='1.0.0',
+    version='1.0.1',
     license='MIT',
     description='ridi-impala-connector',
     long_description='%s' % read('README.md'),
