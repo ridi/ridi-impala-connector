@@ -1,6 +1,6 @@
 from impala.dbapi import connect as impala_connect
 
-from ridi.impala import impala_thrift_connection
+from ridi.impala.conn import impala_thrift_connection
 
 
 class ImpalaThriftClient(object):
