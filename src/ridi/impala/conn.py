@@ -1,17 +1,10 @@
-from impala.dbapi import connect as impala_connect
-from impala.error import Error as impala_Error
-from ridi.settings import IMPALA_CONNECT_ARGS
 import logging
 
+from impala.error import Error as impala_Error
+
+from ridi.impala.error import ImpalaError
+
 logger = logging.getLogger(__name__)
-
-
-class ImpalaError(Exception):
-    def __init__(self, cause):
-        self.cause = cause
-
-    def __str__(self):
-        return str(self.cause)
 
 
 class impala_thrift_connection(object):
@@ -69,40 +62,4 @@ class impala_thrift_connection(object):
                     return
 
 
-class ImpalaThriftClient(object):
-    def __init__(self, connect_args):
-        self.connect_args = connect_args
-
-    def get_connection(self, **extra_args):
-        connect_args = self.connect_args
-        connect_args.update(extra_args)
-        impala_conn = impala_connect(**connect_args)
-        return impala_thrift_connection(impala_conn)
-
-
-def date_to_dict(the_date):
-    return {'year': the_date.year, 'month': the_date.month, 'day': the_date.day}
-
-
-def date_where_clause(the_date):
-    return "year=%(year)d AND month=%(month)d AND day=%(day)d" % date_to_dict(the_date)
-
-
-def date_to_partition_spec(the_date):
-    return "(year=%(year)d, month=%(month)d, day=%(day)d)" % date_to_dict(the_date)
-
-
-def date_gte_condition(the_date):
-    return "(year > %(year)d OR (year=%(year)d AND month > %(month)d) OR (year=%(year)d AND month=%(month)d AND day >= %(day)d))" % date_to_dict(the_date)
-
-
-def date_lte_condition(the_date):
-    return "(year < %(year)d OR (year=%(year)d AND month < %(month)d) OR (year=%(year)d AND month=%(month)d AND day <= %(day)d))" % date_to_dict(the_date)
-
-
-def date_eq_condition(the_date):
-    return "(year = %(year)d AND month=%(month)d AND day=%(day)d)" % date_to_dict(the_date)
-
-DATE_AS_STRING = "CONCAT(LPAD(CAST(year AS STRING),4,'0'),'-',LPAD(CAST(month AS STRING),2,'0'),'-',LPAD(CAST(day AS STRING),2,'0'))"
-
-IMPALA_CLIENT = ImpalaThriftClient(IMPALA_CONNECT_ARGS)
+__all__ = ["impala_thrift_connection"]
